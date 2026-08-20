@@ -3,6 +3,7 @@ import streamlit as st
 from dotenv import load_dotenv
 from google import genai
 import requests
+from streamlit_mic_recorder import mic_recorder
 
 
 # Nạp chìa khóa API từ file .env
@@ -31,6 +32,38 @@ if "messages" not in st.session_state:
 for message in st.session_state.messages:
     with st.chat_message(message["role"]):
         st.write(message["content"])
+
+# --- ĐOẠN CODE THÊM CHỨC NĂNG VOICE CHAT ---
+st.write("🎤 Hoặc bấm giữ nút dưới đây để nói chuyện bằng giọng nói:")
+audio_file = mic_recorder(
+    start_prompt="🔴 Bắt đầu nói",
+    stop_prompt="⏹️ Hoàn thành nói",
+    key='recorder'
+)
+
+if audio_file:
+    audio_bytes = audio_file['bytes']
+    with st.chat_message("user"):
+        st.audio(audio_bytes, format='audio/wav')
+    st.session_state.messages.append({"role": "user", "content": "🎵 [Tin nhắn thoại]"})
+    
+    with st.chat_message("assistant"):
+        with st.spinner("AI đang nghe..."):
+            try:
+                response = client.models.generate_content(
+                    model="gemini-2.5-flash",
+                    contents=[
+                        {"mime_type": "audio/wav", "data": audio_bytes},
+                        "Hãy lắng nghe và trả lời ngắn gọn câu hỏi này."
+                    ]
+                )
+                bot_reply = response.text
+                st.write(bot_reply)
+                st.session_state.messages.append({"role": "assistant", "content": bot_reply})
+            except Exception as e:
+                st.error(f"Lỗi: {e}")
+# --------------------------------------------
+
 
 # Khung nhập câu hỏi của người dùng
 if prompt := st.chat_input("Hỏi tôi bất kỳ điều gì..."):
