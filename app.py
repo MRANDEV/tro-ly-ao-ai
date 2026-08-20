@@ -8,8 +8,8 @@ load_dotenv()
 
 # Cấu hình giao diện Web
 st.set_page_config(page_title="Trợ Lý Áo AI", page_icon="🤖")
-st.title("🤖 Trợ Lý Áo cua An")
-st.caption("Ứng dụng AI đầu tay chạy bằng Python")
+st.title("🤖 Trợ Lý Ảo của An")
+st.caption("Ứng dụng AI chạy bằng Python")
 
 # Khởi tạo kết nối với Google AI
 api_key = os.getenv("GEMINI_API_KEY")
