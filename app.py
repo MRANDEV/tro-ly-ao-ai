@@ -50,7 +50,7 @@ if audio_file:
         with st.spinner("AI đang nghe..."):
             try:
                 response = client.models.generate_content(
-                    model="gemini-2.5-flash",
+                    model="gemini-3.6-flash",
                     contents=[
                         genai.types.Part.from_bytes(
                             data=audio_bytes,
@@ -81,7 +81,7 @@ if prompt := st.chat_input("Hỏi tôi bất kỳ điều gì..."):
         try:
             with st.spinner("AI đang suy nghĩ..."):
                 response = client.models.generate_content(
-                    model="gemini-3-flash-preview",
+                    model="gemini-3.6-flash",
                     contents=prompt
                 )
                 bot_reply = response.text
