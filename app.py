@@ -39,13 +39,14 @@ if prompt := st.chat_input("Hỏi tôi bất kỳ điều gì..."):
     with st.chat_message("assistant"):
         message_placeholder = st.empty()
         try:
-            response = client.models.generate_content(
-                model="gemini-3-flash-preview",
-            
-                contents=prompt
-            )
-            bot_reply = response.text
+            with st.spinner("AI đang suy nghĩ..."):
+                response = client.models.generate_content(
+                    model="gemini-3-flash-preview",
+                    contents=prompt
+                )
+                bot_reply = response.text
             message_placeholder.write(bot_reply)
+            
             
             # Lưu câu trả lời vào lịch sử
             st.session_state.messages.append({"role": "assistant", "content": bot_reply})
