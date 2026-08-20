@@ -2,12 +2,16 @@ import os
 import streamlit as st
 from dotenv import load_dotenv
 from google import genai
+import requests
+
 
 # Nạp chìa khóa API từ file .env
 load_dotenv()
 
 # Cấu hình giao diện Web
 st.set_page_config(page_title="Trợ Lý Áo AI", page_icon="🤖")
+st.components.v1.html(f'<div style="display:flex; justify-content:center;"><iframe src="https://lottie.host" style="border:none; width:200px; height:200px;"></iframe></div>', height=200)
+
 st.title("🤖 Trợ Lý Ảo của An")
 st.caption("Ứng dụng AI chạy bằng Python")
 
