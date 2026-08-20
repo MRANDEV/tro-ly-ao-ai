@@ -1,7 +1,7 @@
 import os
 import streamlit as st
 from dotenv import load_dotenv
-from google import genai
+from google import genai, types 
 import requests
 from streamlit_mic_recorder import mic_recorder
 
