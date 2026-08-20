@@ -1,7 +1,7 @@
 import os
 import streamlit as st
 from dotenv import load_dotenv
-from google import genai, types 
+from google import genai
 import requests
 from streamlit_mic_recorder import mic_recorder
 
@@ -40,7 +40,6 @@ audio_file = mic_recorder(
     stop_prompt="⏹️ Hoàn thành nói",
     key='recorder'
 )
-
 if audio_file:
     audio_bytes = audio_file['bytes']
     with st.chat_message("user"):
@@ -53,8 +52,11 @@ if audio_file:
                 response = client.models.generate_content(
                     model="gemini-2.5-flash",
                     contents=[
-                        {"mime_type": "audio/wav", "data": audio_bytes},
-                        "Hãy lắng nghe và trả lời ngắn gọn câu hỏi này."
+                        genai.types.Part.from_bytes(
+                            data=audio_bytes,
+                            mime_type="audio/wav",
+                        ),
+                        "Hãy lắng nghe đoạn âm thanh trên và trả lời câu hỏi của người dùng một cách ngắn gọn."
                     ]
                 )
                 bot_reply = response.text
@@ -62,6 +64,7 @@ if audio_file:
                 st.session_state.messages.append({"role": "assistant", "content": bot_reply})
             except Exception as e:
                 st.error(f"Lỗi: {e}")
+
 # --------------------------------------------
 
 
